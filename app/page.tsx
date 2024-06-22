@@ -1,12 +1,11 @@
-import React from "react";
+import Navbar from "./components/Navbar";
 import UploadForm from "./components/UploadForm";
 
-const page = () => {
+export default function UploadPage() {
   return (
     <div>
+      <Navbar />
       <UploadForm />
     </div>
   );
-};
-
-export default page;
+}

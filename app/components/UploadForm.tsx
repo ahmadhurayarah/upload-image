@@ -1,34 +1,11 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect,
-  ChangeEvent,
-  FormEvent,
-  useRef,
-} from "react";
-import Image from "next/image";
+import React, { useState, ChangeEvent, FormEvent, useRef } from "react";
 import { Upload } from "../actions/Upload"; // Import the upload function
 
 export default function UploadForm() {
   const [file, setFile] = useState<File | null>(null);
-  const [images, setImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const fetchImages = async () => {
-    const response = await fetch("/api/images");
-    if (response.ok) {
-      const imageList: string[] = await response.json();
-      const sortedImages = imageList.sort((a: string, b: string) =>
-        b.localeCompare(a)
-      );
-      setImages(sortedImages);
-    }
-  };
-
-  useEffect(() => {
-    fetchImages();
-  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files ? e.target.files[0] : null;
@@ -45,23 +22,6 @@ export default function UploadForm() {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-      fetchImages();
-    }
-  };
-
-  const handleDelete = async (key: string) => {
-    const response = await fetch("/api/delete", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ key }),
-    });
-
-    if (response.ok) {
-      fetchImages();
-    } else {
-      console.error("Failed to delete image");
     }
   };
 
@@ -82,28 +42,6 @@ export default function UploadForm() {
           className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 cursor-pointer"
         />
       </form>
-      <div>
-        <h2 className="text-2xl font-semibold mb-4">Uploaded Images</h2>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {images.map((image, index) => (
-            <li key={index} className="relative group">
-              <Image
-                src={`https://wizxaibucket.s3.amazonaws.com/${image}`}
-                alt={`Uploaded ${image}`}
-                width={200}
-                height={200}
-                className="w-full h-auto rounded"
-              />
-              <button
-                onClick={() => handleDelete(image)}
-                className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded opacity-100 group-hover:opacity-100 sm:opacity-100 transition-opacity duration-300"
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
     </main>
   );
 }
