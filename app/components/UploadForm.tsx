@@ -22,16 +22,11 @@ export default function UploadForm() {
       const sortedImages = imageList.sort((a: string, b: string) =>
         b.localeCompare(a)
       );
-      localStorage.setItem("cachedImages", JSON.stringify(sortedImages));
       setImages(sortedImages);
     }
   };
 
   useEffect(() => {
-    const cachedImages = localStorage.getItem("cachedImages");
-    if (cachedImages) {
-      setImages(JSON.parse(cachedImages));
-    }
     fetchImages();
   }, []);
 
@@ -89,7 +84,7 @@ export default function UploadForm() {
       </form>
       <div>
         <h2 className="text-2xl font-semibold mb-4">Uploaded Images</h2>
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {images.map((image, index) => (
             <li key={index} className="relative group">
               <Image
@@ -101,7 +96,7 @@ export default function UploadForm() {
               />
               <button
                 onClick={() => handleDelete(image)}
-                className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded opacity-100 group-hover:opacity-100 sm:opacity-100 transition-opacity duration-300"
               >
                 Delete
               </button>
