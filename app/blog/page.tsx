@@ -31,8 +31,8 @@ export default function BlogList() {
           ? a.title.localeCompare(b.title)
           : b.title.localeCompare(a.title);
       }
-      const dateA = new Date(a[sortBy]);
-      const dateB = new Date(b[sortBy]);
+      const dateA = new Date(a[sortBy as keyof Blog]);
+      const dateB = new Date(b[sortBy as keyof Blog]);
       return sortOrder === "asc"
         ? dateA.getTime() - dateB.getTime()
         : dateB.getTime() - dateA.getTime();
