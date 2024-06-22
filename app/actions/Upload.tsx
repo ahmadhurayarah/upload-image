@@ -47,6 +47,7 @@ export async function Upload(image: FormData) {
     await s3.send(command);
 
     console.log(`File uploaded to S3: ${key}`);
+    return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
   } catch (e) {
     console.error(e);
     throw new Error("File upload failed");
