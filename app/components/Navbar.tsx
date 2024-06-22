@@ -2,18 +2,15 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="bg-gray-800 p-4">
-      <div className="container mx-auto flex justify-between">
-        <Link href="/" className="text-white ">
-          Home
-        </Link>
-        <Link href="/upload" className="text-white ">
+    <div className="flex items-center justify-center">
+      <div className="w-[10rem] flex justify-between ">
+        <Link href="/" className="text-black border-black-[1px] rounded">
           Upload
         </Link>
-        <Link href="/images" className="text-white ">
+        <Link href="/images" className="text-black ">
           Show Images
         </Link>
       </div>
-    </nav>
+    </div>
   );
 }

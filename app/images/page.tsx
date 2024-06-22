@@ -1,58 +1,45 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Image from "next/image";
 
-const ImagesPage = () => {
+import React, { useEffect, useState } from "react";
+import { listImages } from "../actions/listImages"; // Import the listImages function
+import Navbar from "../components/Navbar";
+
+export default function ImageGallery() {
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get("/api/images");
-        const imageList: string[] = response.data;
-        setImages(imageList.sort((a: string, b: string) => b.localeCompare(a)));
+        const imageKeys = await listImages();
+        setImages(imageKeys);
       } catch (error) {
-        console.error("Error fetching images", error);
+        console.error("Failed to fetch images", error);
       }
     };
 
     fetchImages();
   }, []);
 
-  const handleDelete = async (key: string) => {
-    try {
-      await axios.delete("/api/delete", { data: { key } });
-      setImages(images.filter((image) => image !== key));
-    } catch (error) {
-      console.error("Failed to delete image", error);
-    }
-  };
+  const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
+  const region = process.env.NEXT_PUBLIC_AWS_REGION;
 
   return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Uploaded Images</h1>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {images.map((image, index) => (
-          <li key={index} className="relative group">
-            <Image
-              src={`https://wizxaibucket.s3.amazonaws.com/${image}`}
-              alt={`Uploaded ${image}`}
-              width={200}
-              height={200}
-              className="w-full h-auto rounded"
-            />
-            <button
-              onClick={() => handleDelete(image)}
-              className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded opacity-100 group-hover:opacity-100 sm:opacity-100 transition-opacity duration-300"
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
-    </main>
+    <>
+      <Navbar />
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-4">Image Gallery</h1>
+        <div className="grid grid-cols-3 gap-4">
+          {images.map((key) => (
+            <div key={key} className="border p-2">
+              <img
+                src={`https://wizxaibucket.s3.amazonaws.com/${key}`}
+                alt={key}
+                className="w-full"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
-};
-
-export default ImagesPage;
+}
