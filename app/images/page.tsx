@@ -9,8 +9,9 @@ export default function ImageGallery() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const imageKeys = await listImages();
-        setImages(imageKeys);
+        const imageKeys: (string | undefined)[] = await listImages();
+        const validImageKeys: string[] = imageKeys.filter((key): key is string => key !== undefined);
+        setImages(validImageKeys);
       } catch (error) {
         console.error("Failed to fetch images", error);
       }
