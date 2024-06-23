@@ -52,7 +52,7 @@ export default function UploadForm() {
 
   return (
     <main className="container mx-auto p-4">
-      <h1 className="text-3xl mb-4">Upload</h1>
+      <h1 className="text-3xl mb-4">Upload Image</h1>
       {loading && (
         <div className="mb-4">
           <BarLoader color="#36d7b7" loading={loading} width="100%" />

@@ -8,7 +8,7 @@ export default function Navbar() {
 
   return (
     <div className="mt-4 flex items-center justify-center">
-      <div className="w-[20rem] flex justify-center items-center gap-x-6 border border-black rounded-sm">
+      <div className="w-[24rem] flex justify-center items-center gap-x-6 border border-black rounded-sm">
         <Link
           href="/"
           className={`${
@@ -17,7 +17,7 @@ export default function Navbar() {
               : "text-gray-600"
           }`}
         >
-          Upload
+          Upload Image
         </Link>
         <Link
           href="/images"
