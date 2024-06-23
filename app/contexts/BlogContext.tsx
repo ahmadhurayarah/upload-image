@@ -1,14 +1,19 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import axiosInstance from "@/lib/axiosInstance";
 import { Blog } from "@/types";
 
 interface BlogContextType {
   blogs: Blog[];
-  fetchBlogs: () => void;
+  addBlog: (blog: Blog) => void;
   deleteBlog: (blogId: string) => void;
-  addBlog: (newBlog: Blog) => void; // New function for adding a blog
 }
 
 const BlogContext = createContext<BlogContextType | undefined>(undefined);
@@ -21,18 +26,19 @@ export const useBlogs = () => {
   return context;
 };
 
-export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const BlogProvider = ({ children }: { children: ReactNode }) => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
-  const fetchBlogs = async () => {
-    try {
+  useEffect(() => {
+    const fetchBlogs = async () => {
       const response = await axiosInstance.get<Blog[]>("/api/blog");
       setBlogs(response.data);
-    } catch (error) {
-      console.error("Failed to fetch blogs", error);
-    }
+    };
+    fetchBlogs();
+  }, []);
+
+  const addBlog = (blog: Blog) => {
+    setBlogs((prevBlogs) => [...prevBlogs, blog]);
   };
 
   const deleteBlog = async (blogId: string) => {
@@ -44,16 +50,8 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const addBlog = (newBlog: Blog) => {
-    setBlogs((prevBlogs) => [newBlog, ...prevBlogs]);
-  };
-
-  useEffect(() => {
-    fetchBlogs();
-  }, []);
-
   return (
-    <BlogContext.Provider value={{ blogs, fetchBlogs, deleteBlog, addBlog }}>
+    <BlogContext.Provider value={{ blogs, addBlog, deleteBlog }}>
       {children}
     </BlogContext.Provider>
   );
