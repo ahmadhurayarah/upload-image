@@ -76,7 +76,7 @@ export default function BlogList() {
             </select>
           </div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200 table-fixed">
             <thead>
               <tr>
@@ -120,6 +120,35 @@ export default function BlogList() {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="block lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+          {sortedBlogs.map((blog) => (
+            <div
+              key={blog.id}
+              className="bg-white p-4 mb-4 rounded-lg shadow-md"
+            >
+              <h2 className="text-xl font-bold mb-2">{blog.title}</h2>
+              <p className="mb-2">{blog.description}</p>
+              <div className="mb-2 w-[15rem] h-[15rem] relative">
+                <Image
+                  src={blog.image}
+                  alt={blog.title}
+                  layout="fill"
+                  objectFit="contain"
+                  priority
+                  className="rounded-md"
+                />
+              </div>
+              <p className="mb-2 text-gray-600">Tags: {blog.tags}</p>
+              <p className="mb-2 text-gray-600">
+                Created At: {new Date(blog.createdAt).toLocaleDateString()}
+              </p>
+              <p className="mb-2 text-gray-600">
+                Updated At: {new Date(blog.updatedAt).toLocaleDateString()}
+              </p>
+              <BlogActions blogId={blog.id} />
+            </div>
+          ))}
         </div>
       </div>
     </>
