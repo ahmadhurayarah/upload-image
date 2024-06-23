@@ -1,30 +1,18 @@
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
-import { Upload } from "@/app/actions/Upload";
 
 export async function DELETE(
   req: Request,
   { params }: { params: { blogId: string } }
 ) {
   try {
-    const { blogId } = params;
-    if (!blogId) {
+    if (!params.blogId) {
       return new NextResponse("Blog ID is required", { status: 400 });
-    }
-
-    const blog = await prismadb.blog.findUnique({
-      where: {
-        id: blogId,
-      },
-    });
-
-    if (!blog) {
-      return new NextResponse("Blog not found", { status: 404 });
     }
 
     const deletedBlog = await prismadb.blog.delete({
       where: {
-        id: blogId,
+        id: params.blogId,
       },
     });
 
@@ -43,20 +31,16 @@ export async function PATCH(
     const body = await req.json();
     const { title, description, image, tags } = body;
 
-    if (!title || !description || !image || !tags) {
-      return new NextResponse(
-        "Title, description, image, and tags are required",
-        {
-          status: 400,
-        }
-      );
+    if (!title || !description) {
+      // Basic validation
+      return new NextResponse("Title and description are required", {
+        status: 400,
+      });
     }
 
     if (!params.blogId) {
       return new NextResponse("Blog ID is required", { status: 400 });
     }
-
-    const imageUrl = await Upload(image);
 
     const updatedBlog = await prismadb.blog.update({
       where: {
@@ -65,8 +49,8 @@ export async function PATCH(
       data: {
         title,
         description,
-        image: imageUrl,
-        tags,
+        image: image || null, // Handle optional image
+        tags: tags || null, // Handle optional tags
       },
     });
 
@@ -95,7 +79,7 @@ export async function GET(
     if (!blog) {
       return new NextResponse("Blog not found", { status: 404 });
     }
-
+    console.log(blog);
     return NextResponse.json(blog);
   } catch (error) {
     console.log("[BLOG_GET]", error);

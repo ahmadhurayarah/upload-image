@@ -16,11 +16,12 @@ const BlogActions: React.FC<BlogActionsProps> = ({ blogId }) => {
 
   return (
     <div>
-      <Link href={`/blog/${blogId}`}>
+      <Link href={`/blog/view/${blogId}`}>
         <button className="bg-green-500 text-white px-2 py-1 rounded mr-2">
           View
         </button>
       </Link>
+
       <Link href={`/blog/edit/${blogId}`}>
         <button className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">
           Edit

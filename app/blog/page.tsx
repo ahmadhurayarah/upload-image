@@ -49,7 +49,6 @@ export default function BlogList() {
 
   return (
     <>
-      <Navbar />
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">All Blogs</h1>
         <div className="mb-4 flex flex-col md:flex-row justify-between items-center">
@@ -121,11 +120,11 @@ export default function BlogList() {
             </tbody>
           </table>
         </div>
-        <div className="block lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="block lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
           {sortedBlogs.map((blog) => (
             <div
               key={blog.id}
-              className="bg-white p-4 mb-4 rounded-lg shadow-md"
+              className="bg-white p-4 mb-4 rounded-lg shadow-md w-full max-w-[20rem] md:max-w-[15rem] mx-auto"
             >
               <h2 className="text-xl font-bold mb-2">{blog.title}</h2>
               <p className="mb-2">{blog.description}</p>
