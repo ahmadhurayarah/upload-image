@@ -53,9 +53,9 @@ export default function ImageGallery() {
                   />
                   <button
                     onClick={() => handleDelete(key)}
-                    className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                    className="absolute top-2 right-2 text-red-500 hover:text-red-700 flex flex-row items-center justify-center"
                   >
-                    <IoCloseCircle size={25} />
+                    Delete <IoCloseCircle size={25} />
                   </button>
                 </div>
               </div>
